@@ -1,19 +1,17 @@
 ---
 name: gitlab-basics
 description: "Use when doing quick GitLab auth and everyday git operations: login, clone/pull, remote setup, push, branch, merge request, and common permission fixes."
-version: 1.0.3
+version: 1.0.4
 author: mag1art
 license: Apache License 2.0
 triggers:
-  - GitLab
+  - gitlab
   - gitlab.com
   - self-hosted GitLab
   - glab
-  - GitLab auth
-  - Personal Access Token
   - PAT
-  - clone GitLab
-  - GitLab remote
+  - clone gitlab
+  - gitlab remote
   - git remote
   - git pull
   - git push
@@ -21,7 +19,6 @@ triggers:
   - merge request
   - MR
   - protected branch
-  - SSH permission denied
 metadata:
   hermes:
     tags: [gitlab, git, glab, auth, pat, ssh, clone, remote, branch, merge-request, ci-cd, repository-management]

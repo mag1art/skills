@@ -1,9 +1,9 @@
 ---
 name: gitlab-basics
 description: "Use when doing quick GitLab auth and everyday git operations: login, clone/pull, remote setup, push, branch, merge request, and common permission fixes."
-version: 1.0.2
+version: 1.0.3
 author: mag1art
-license: MIT
+license: Apache License 2.0
 triggers:
   - GitLab
   - gitlab.com

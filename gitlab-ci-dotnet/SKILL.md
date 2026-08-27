@@ -45,3 +45,46 @@ Prefer explicit validate, build, test, package, and deploy stages. Keep restore,
 ## Quality Gate
 
 Check YAML syntax, MR and protected-branch rules, cache correctness, artifact paths, test results, dependency readiness, secret masking, and deployment approvals.
+## Example: Build and Test Pipeline
+
+```yaml
+stages: [validate, build, test, image]
+
+variables:
+  NUGET_PACKAGES: "$CI_PROJECT_DIR/.nuget/packages"
+
+cache:
+  key:
+    files:
+      - "*.sln"
+      - "**/*.csproj"
+      - "Directory.Packages.props"
+  paths:
+    - .nuget/packages/
+
+validate:
+  stage: validate
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet format --verify-no-changes
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet restore
+    - dotnet build --no-restore --configuration Release
+
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet test --no-restore --configuration Release --logger junit
+  artifacts:
+    when: always
+    reports:
+      junit: "**/TestResults/*.xml"
+```
+
+Use an SDK image compatible with global.json. Add PostgreSQL or RabbitMQ service containers only to jobs that need them, and make deployment rules explicit for protected branches.
+

@@ -53,3 +53,23 @@ Use counters for totals, histograms for duration/size/latency, and gauges only f
 ## Quality Gate
 
 Verify correlation across logs/traces, useful dashboards and alerts, redaction, cardinality, sampling, health semantics, and graceful telemetry shutdown.
+## Example: OpenTelemetry Setup
+
+```csharp
+builder.Logging.AddJsonConsole();
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(r => r.AddService(builder.Environment.ApplicationName))
+    .WithMetrics(m => m
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddRuntimeInstrumentation())
+    .WithTracing(t => t
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation()
+        .AddOtlpExporter());
+```
+
+Use stable metric names and low-cardinality labels. Add request duration and dependency failure metrics, but never use user IDs, URLs with unbounded values, tokens, or full exception text as metric labels.
+

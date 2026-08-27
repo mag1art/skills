@@ -83,3 +83,22 @@ Inspect Web.config, Global.asax, FilterConfig, RouteConfig, BundleConfig, Areas,
 ## Quality Gate
 
 Verify runtime generation, routing, binding and validation, antiforgery, authorization, output encoding, error handling, performance, tests, and production configuration.
+## Example: MVC POST with Validation and Anti-Forgery
+
+```csharp
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(
+    CreateOrderViewModel model,
+    CancellationToken ct)
+{
+    if (!ModelState.IsValid)
+        return View(model);
+
+    var orderId = await _orders.CreateAsync(model, ct);
+    return RedirectToAction(nameof(Details), new { id = orderId });
+}
+```
+
+For classic MVC, verify anti-forgery configuration and binding behavior. For ASP.NET Core MVC, prefer validated request models, explicit authorization policies, async actions, and a service layer. Do not bind domain entities directly from form input.
+

@@ -51,3 +51,34 @@ Use an outbox when database and publication must be consistent. Use an inbox/ide
 ## Quality Gate
 
 Test duplicate delivery, ordering assumptions, cancellation, broker reconnect, publish confirmation, nack/requeue, dead-lettering, schema evolution, and shutdown.
+## Example: Ack After the Side Effect
+
+```csharp
+await foreach (var delivery in consumer.ReadAllAsync(ct))
+{
+    try
+    {
+        if (await inbox.IsProcessedAsync(delivery.MessageId, ct))
+        {
+            await consumer.AckAsync(delivery, ct);
+            continue;
+        }
+
+        await handler.HandleAsync(delivery.Payload, ct);
+        await inbox.MarkProcessedAsync(delivery.MessageId, ct);
+        await consumer.AckAsync(delivery, ct);
+    }
+    catch (TransientMessageException) when (!ct.IsCancellationRequested)
+    {
+        await consumer.NackAsync(delivery, requeue: true, ct);
+    }
+    catch (Exception ex) when (!ct.IsCancellationRequested)
+    {
+        logger.LogError(ex, "Message processing failed {MessageId}", delivery.MessageId);
+        await consumer.DeadLetterAsync(delivery, ct);
+    }
+}
+```
+
+The abstraction hides RabbitMQ client details, but the ordering is intentional: idempotency check, business side effect, processed marker, then acknowledgement. Make the inbox/outbox transaction strategy explicit for the selected database.
+

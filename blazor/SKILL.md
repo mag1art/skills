@@ -94,3 +94,32 @@ Official references:
 - https://learn.microsoft.com/aspnet/core/blazor/components/render-modes
 - https://learn.microsoft.com/aspnet/core/blazor/fundamentals
 - https://learn.microsoft.com/aspnet/core/blazor/hosting-models
+## Example: Interactive Component and Form
+
+```razor
+@page "/orders/{Id:guid}"
+@rendermode InteractiveServer
+
+<EditForm Model="_model" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <InputText @bind-Value="_model.Comment" />
+    <ValidationSummary />
+    <button type="submit" disabled="@_saving">Save</button>
+</EditForm>
+
+@code {
+    [Parameter] public Guid Id { get; set; }
+    private readonly OrderModel _model = new();
+    private bool _saving;
+
+    private async Task SaveAsync()
+    {
+        _saving = true;
+        try { await Orders.UpdateCommentAsync(Id, _model.Comment); }
+        finally { _saving = false; }
+    }
+}
+```
+
+Choose the render mode deliberately. InteractiveServer keeps execution on the server; InteractiveWebAssembly requires client-downloaded code and a suitable API boundary. Treat component state as scoped to the selected hosting model and never put secrets in WebAssembly code.
+

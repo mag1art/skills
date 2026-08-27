@@ -154,3 +154,22 @@ Verify SDK version, directives, package versions, implicit build files, restore,
 
 Official reference:
 https://learn.microsoft.com/en-us/dotnet/core/sdk/file-based-apps
+## Example: Single-File Utility
+
+```csharp
+#:package Spectre.Console@0.49.1
+
+using Spectre.Console;
+
+AnsiConsole.MarkupLine("[green]File-based app started[/]");
+```
+
+Run it explicitly when the directory also contains a project:
+
+```bash
+dotnet run --file tools/report.cs -- --input data.json
+dotnet project convert tools/report.cs
+```
+
+Keep package versions intentional and convert the file to a normal project when it needs tests, multiple source files, complex build properties, or team-scale maintenance.
+

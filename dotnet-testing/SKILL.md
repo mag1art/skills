@@ -52,3 +52,27 @@ dotnet format --verify-no-changes
 dotnet build --no-restore
 dotnet test --no-build
 ~~~
+## Example: API Integration Test
+
+```csharp
+public sealed class OrdersApiTests
+    : IClassFixture<WebApplicationFactory<Program>>
+{
+    private readonly HttpClient _client;
+
+    public OrdersApiTests(WebApplicationFactory<Program> factory)
+        => _client = factory.CreateClient();
+
+    [Fact]
+    public async Task Get_missing_order_returns_404()
+    {
+        using var response = await _client.GetAsync(
+            "/api/orders/00000000-0000-0000-0000-000000000001");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+}
+```
+
+Use WebApplicationFactory for the real application composition. Replace the database with a test container or isolated test database when SQL/provider behavior matters; do not use EF Core InMemory as a substitute for PostgreSQL.
+

@@ -54,3 +54,30 @@ Do not optimize without a workload, baseline, or acceptance metric. Do not trade
 ## Quality Gate
 
 Provide before/after measurements, resource assumptions, failure behavior, and a rollback-safe change.
+## Example: Bounded Channel Pipeline
+
+```csharp
+var channel = Channel.CreateBounded<WorkItem>(
+    new BoundedChannelOptions(256)
+    {
+        FullMode = BoundedChannelFullMode.Wait,
+        SingleWriter = true
+    });
+
+var producer = ProduceAsync(channel.Writer, ct);
+var consumers = Enumerable.Range(0, 4)
+    .Select(_ => ConsumeAsync(channel.Reader, ct));
+
+await Task.WhenAll(consumers.Append(producer));
+
+static async Task ConsumeAsync(
+    ChannelReader<WorkItem> reader,
+    CancellationToken ct)
+{
+    await foreach (var item in reader.ReadAllAsync(ct))
+        await ProcessAsync(item, ct);
+}
+```
+
+Keep queue capacity and worker count explicit. Decide whether ordering, retries, duplicate processing, and shutdown draining are part of the contract. Measure throughput, queue depth, latency, allocations, and memory before and after the change.
+

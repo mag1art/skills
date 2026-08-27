@@ -15,6 +15,9 @@ Reusable skills for AI coding agents and development harnesses.
 | dotnet-messaging | RabbitMQ and reliable asynchronous microservice messaging |
 | docker-dotnet | Containerizing and running .NET services |
 | gitlab-ci-dotnet | GitLab CI pipelines for .NET services |
+| dotnet-version-guide | .NET Core/.NET version history, compatibility, and upgrade guidance |
+| aspnet-mvc | Classic ASP.NET MVC and ASP.NET Core MVC development |
+| blazor | Blazor Web Apps, render modes, components, forms, and interop |
 | gitlab-basics | GitLab and git day-to-day operations |
 | pandoc | Safe Markdown, DOCX, PDF, and HTML conversion |
 

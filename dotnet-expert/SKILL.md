@@ -1,31 +1,23 @@
 ---
 name: dotnet-expert
-version: 2.1.0
+version: 2.2.0
+description: "Use for production C# and .NET backend development, review, architecture, APIs, EF Core, security, performance, and testing."
 author: mag1art
-license: Apache License 2.0
-description: "Use when building or reviewing modern .NET 10/C# 14 applications: ASP.NET Core Controller APIs, Minimal APIs, EF Core 10, service/repository layers, OpenAPI, validation, auth, performance, or production-quality C# backend code."
+license: Apache-2.0
+tags: [dotnet, csharp, aspnetcore, efcore, backend, openapi, performance, quality]
 triggers:
   - .NET
-  - .NET 10
-  - dotnet
   - C#
-  - C# 14
   - ASP.NET Core
-  - Controller
   - Web API
   - Minimal API
-  - OpenAPI
-  - Swagger
   - Entity Framework
   - EF Core
-role: specialist
-scope: implementation
-output-format: code
+  - backend review
 metadata:
   hermes:
     tags: [dotnet, csharp, aspnetcore, efcore, backend, openapi, performance, quality]
 ---
-
 # .NET Expert
 
 ## Overview
@@ -44,6 +36,11 @@ Default assumptions unless the repository says otherwise:
 ## When to Use
 
 - Implementing or reviewing C#/.NET backend code.
+
+## When Not to Use
+
+- Do not load this skill for frontend-only work, non-.NET repositories, or simple git/document operations.
+- Do not impose Controller-Service-Repository, CQRS, DDD, or a specific database provider when the existing project uses another intentional design.
 - Designing ASP.NET Core APIs, controllers, filters, middleware, DI, options, auth, and background services.
 - Writing EF Core models, migrations, repositories, queries, transactions, and performance fixes.
 - Defining OpenAPI contracts, response schemas, errors, auth schemes, and client-generation compatibility.
@@ -475,7 +472,7 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.Email).HasMaxLength(320).IsRequired();
         builder.HasIndex(u => u.Email).IsUnique();
         builder.Property(u => u.Name).HasMaxLength(100).IsRequired();
-        builder.Property(u => u.RowVersion).IsRowVersion();
+        builder.UseXminAsConcurrencyToken(); // Npgsql. For SQL Server, use IsRowVersion().
     }
 }
 ```

@@ -66,3 +66,26 @@ Keep transaction boundaries at the use-case level when multiple writes must be a
 ## Quality Gate
 
 Check SQL shape, indexes, nullability, tracking mode, transaction scope, cancellation, migration safety, and real-PostgreSQL integration coverage.
+## Example: Bounded Read and Concurrency
+
+```csharp
+var orders = await db.Orders
+    .AsNoTracking()
+    .Where(x => x.CustomerId == customerId && x.Id > afterId)
+    .OrderBy(x => x.Id)
+    .Select(x => new OrderListItem(x.Id, x.Status, x.CreatedAt))
+    .Take(Math.Clamp(pageSize, 1, 100))
+    .ToListAsync(ct);
+
+var changed = await db.Orders
+    .Where(x => x.Id == id && x.Version == expectedVersion)
+    .ExecuteUpdateAsync(setters => setters
+        .SetProperty(x => x.Status, OrderStatus.Paid)
+        .SetProperty(x => x.UpdatedAt, DateTimeOffset.UtcNow), ct);
+
+if (changed == 0)
+    throw new ConcurrencyException("The order was changed or deleted.");
+```
+
+The first query uses keyset pagination and projection. ExecuteUpdate bypasses change tracking, so do not expect an already tracked entity to be updated in memory. Use a transaction when several writes must be atomic.
+

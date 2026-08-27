@@ -59,3 +59,30 @@ Check authentication scheme, authorization policy, object-level access, CORS, re
 ## Quality Gate
 
 Verify build/tests, actual OpenAPI schemas, cancellation, authorization, bounded reads, and safe structured logging.
+## Example: Explicit HTTP Contract
+
+```csharp
+builder.Services.AddProblemDetails();
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
+
+app.UseExceptionHandler();
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapGet("/api/orders/{id:guid}", async (
+    Guid id,
+    IOrderService orders,
+    CancellationToken ct) =>
+{
+    var order = await orders.GetAsync(id, ct);
+    return order is null ? Results.NotFound() : Results.Ok(order);
+})
+.RequireAuthorization("orders:read")
+.WithName("GetOrder")
+.Produces<OrderResponse>()
+.ProducesProblem(StatusCodes.Status404NotFound);
+```
+
+Keep the handler focused on HTTP concerns. Put business rules, persistence, and external calls in IOrderService. Return ProblemDetails consistently for validation and unexpected errors.
+

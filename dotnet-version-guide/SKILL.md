@@ -125,3 +125,27 @@ Use the official version pages for detailed APIs and breaking changes:
 ## Response Contract
 
 When answering a version question, state the detected target and SDK, requested target, immediately available features, required target/package changes, breaking risks, exact project/CI/container changes, and validation commands.
+## Example: Target Framework and SDK Pinning
+
+A project chooses its runtime and compiler independently but should keep them compatible:
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+</Project>
+```
+
+```json
+{
+  "sdk": {
+    "version": "8.0.400",
+    "rollForward": "latestFeature"
+  }
+}
+```
+
+During an upgrade, change the target framework, SDK image, CI runtime, package versions, deployment runtime, and tests together. Verify analyzers, serializers, EF providers, native dependencies, and hosting behavior before enabling new language features.

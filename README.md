@@ -16,6 +16,7 @@ Reusable skills for AI coding agents and development harnesses.
 | docker-dotnet | Containerizing and running .NET services |
 | gitlab-ci-dotnet | GitLab CI pipelines for .NET services |
 | dotnet-version-guide | .NET Core/.NET version history, compatibility, and upgrade guidance |
+| dotnet-file-based-apps | Single-file C# applications with the .NET 10 SDK |
 | aspnet-mvc | Classic ASP.NET MVC and ASP.NET Core MVC development |
 | blazor | Blazor Web Apps, render modes, components, forms, and interop |
 | gitlab-basics | GitLab and git day-to-day operations |

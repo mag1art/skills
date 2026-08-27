@@ -24,13 +24,13 @@ Every skill is a directory containing a SKILL.md file with YAML frontmatter and 
 
 ## Validation
 
-Run:
+The repository uses a dependency-free C# validator targeting .NET 8:
 
 ~~~bash
-ruby scripts/validate_skills.rb
+dotnet run --project tools/SkillValidator/SkillValidator.csproj --configuration Release
 ~~~
 
-The validator checks filenames, required metadata, unique skill names, and unresolved local skill references.
+The validator checks filenames, required metadata, unique skill names, list fields, and unresolved local skill references.
 
 ## License
 

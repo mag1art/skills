@@ -142,11 +142,10 @@ A project chooses its runtime and compiler independently but should keep them co
 ```json
 {
   "sdk": {
-    "version": "8.0.4xx",
+    "version": "8.0.400",
     "rollForward": "latestFeature"
   }
 }
 ```
 
 During an upgrade, change the target framework, SDK image, CI runtime, package versions, deployment runtime, and tests together. Verify analyzers, serializers, EF providers, native dependencies, and hosting behavior before enabling new language features.
-

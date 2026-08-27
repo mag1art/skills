@@ -78,13 +78,13 @@ build:
 test:
   stage: test
   image: mcr.microsoft.com/dotnet/sdk:10.0
-  script:
-    - dotnet test --no-restore --configuration Release --logger junit
-  artifacts:
-    when: always
-    reports:
-      junit: "**/TestResults/*.xml"
+ script:
+    - dotnet restore
+    - dotnet test --no-restore --configuration Release --logger "trx;LogFileName=test-results.trx"
+ artifacts:
+   when: always
+   reports:
+      junit: "**/TestResults/*.trx"
 ```
 
 Use an SDK image compatible with global.json. Add PostgreSQL or RabbitMQ service containers only to jobs that need them, and make deployment rules explicit for protected branches.
-

@@ -1,30 +1,25 @@
 ---
 name: gitlab-basics
-description: "Use when doing quick GitLab auth and everyday git operations: login, clone/pull, remote setup, push, branch, merge request, and common permission fixes."
-version: 1.0.4
+version: 1.1.0
+description: "Use for everyday GitLab and git operations: authentication, clone, pull, branch, push, merge requests, and permission troubleshooting."
 author: mag1art
-license: Apache License 2.0
+license: Apache-2.0
+tags: [gitlab, git, glab, auth, pat, ssh, clone, remote, branch, merge-request]
 triggers:
-  - gitlab
+  - GitLab
   - gitlab.com
-  - self-hosted GitLab
   - glab
   - PAT
-  - clone gitlab
-  - gitlab remote
+  - clone GitLab
   - git remote
   - git pull
   - git push
-  - branch
   - merge request
-  - MR
   - protected branch
 metadata:
   hermes:
-    tags: [gitlab, git, glab, auth, pat, ssh, clone, remote, branch, merge-request, ci-cd, repository-management]
-    related_skills: [gitlab-glab-workflow]
+    tags: [gitlab, git, glab, auth, pat, ssh, clone, remote, branch, merge-request]
 ---
-
 # GitLab Basics
 
 ## Overview
@@ -32,6 +27,11 @@ metadata:
 Compact GitLab workflow for day-to-day repository work. GitLab may be hosted at `gitlab.com` or at a company/self-hosted address such as `gitlab.company.com`, `git.example.org`, or `https://gitlab.internal`. Treat the host as a variable: `<gitlab-host>`.
 
 Prefer `glab` for GitLab API/MR actions and normal `git` for local history, pull, push, branches, and remotes.
+
+## When Not to Use
+
+- Do not use this skill for GitHub, Bitbucket, or generic git theory without a GitLab operation.
+- Do not force-push or modify protected branches unless the user explicitly requests it and the impact is understood.
 
 ## When to Use
 
